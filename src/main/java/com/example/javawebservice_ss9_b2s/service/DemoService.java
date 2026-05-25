@@ -1,41 +1,63 @@
 package com.example.javawebservice_ss9_b2s.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class DemoService {
 
-    // Tạo logger cho class
-    private static final Logger logger =
-            LoggerFactory.getLogger(DemoService.class);
+    public void applyDiscount(
+            String userId,
+            String code
+    ) {
 
-    public void checkDiscount(String userId, String code) {
-
-        // INFO -> xử lý thành công
         if (code.equals("VIP")) {
 
-            logger.info(
+            // Thành công -> INFO
+            log.info(
                     "Áp dụng thành công cho user: {}",
                     userId
             );
 
-            // WARN -> lỗi nghiệp vụ do người dùng
         } else if (code.equals("EXPIRED")) {
 
-            logger.warn(
+            // Lỗi nghiệp vụ -> WARN
+            log.warn(
                     "Mã giảm giá đã hết hạn: {}",
                     code
             );
 
-            // ERROR -> lỗi hệ thống
         } else {
 
-            logger.error(
+            // Lỗi hệ thống -> ERROR
+            log.error(
                     "Lỗi mất kết nối DB khi check mã: {}",
                     code
             );
         }
+    }
+
+    public static void main(String[] args) {
+
+        DemoService service = new DemoService();
+
+        // INFO
+        service.applyDiscount(
+                "USER01",
+                "VIP"
+        );
+
+        // WARN
+        service.applyDiscount(
+                "USER02",
+                "EXPIRED"
+        );
+
+        // ERROR
+        service.applyDiscount(
+                "USER03",
+                "FAIL"
+        );
     }
 }
